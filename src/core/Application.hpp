@@ -1,0 +1,26 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <vector>
+#include <memory>
+#include "Event.hpp"
+#include "rendering/RenderPass.hpp"
+
+class Application {
+protected:
+    GLFWwindow* window;
+    int initialize(int width, int height);
+    virtual void clean_up();
+
+    std::vector<std::unique_ptr<Event>> v_event;
+    std::vector<std::unique_ptr<RenderPass>> v_render_pass;
+
+public:
+    Application(int width = 800, int height = 600);
+    virtual ~Application();
+    virtual int run();
+
+    bool add_event(std::unique_ptr<Event> event);
+    bool add_render_pass(std::unique_ptr<RenderPass> pass);
+
+};
+
