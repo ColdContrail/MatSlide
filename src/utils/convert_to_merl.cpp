@@ -123,7 +123,9 @@ int main(int argc, char** argv) {
                                 std::cos(theta_out)
                             );
                             
-                            Vector3f fr = brdf.eval(wi, wo);
+                            Vector3f fr_forward = brdf.eval(wi, wo);
+                            Vector3f fr_reverse = brdf.eval(wo, wi);
+                            Vector3f fr = (fr_forward + fr_reverse) * 0.5f;
                             
                             red_sum += fr[0];
                             green_sum += fr[1];

@@ -50,6 +50,7 @@ bool Application::add_render_pass(std::unique_ptr<RenderPass> pass) {
 
 int Application::run() {
     glfwSwapInterval(1);
+    
     while (!glfwWindowShouldClose(window)) {
         for (auto& event:v_event) {
             event->execute(window);
