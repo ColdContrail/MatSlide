@@ -1,3 +1,4 @@
+#include "glm/fwd.hpp"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -77,4 +78,15 @@ public:
         setProjectionMatrix(projection);
     }
 
+    void setVec3(const std::string& name, const glm::vec3& vec) const {
+        glUniform3fv(glGetUniformLocation(program, name.c_str()), 1, glm::value_ptr(vec));
+    }
+
+    void setFloat(const std::string& name, float value) const {
+        glUniform1f(glGetUniformLocation(program, name.c_str()), value);
+    }
+
+    void setInt(const std::string& name, int value) const {
+        glUniform1i(glGetUniformLocation(program, name.c_str()), value);
+    }
 };

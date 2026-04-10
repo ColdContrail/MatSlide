@@ -29,6 +29,10 @@ public:
         return glm::perspective(glm::radians(fovy), aspectRatio, nearPlane, farPlane);
     }
 
+    glm::vec3 GetPosition() const {
+        return position;
+    }
+
     void Rotate(float deltaYaw, float deltaPitch) {
         yaw += deltaYaw * mouseSensitivity;
         pitch += deltaPitch * mouseSensitivity;

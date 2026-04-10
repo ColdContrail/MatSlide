@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "Event.hpp"
+#include "ParameterManager.hpp"
 #include "rendering/RenderPass.hpp"
 
 class Application {
@@ -13,6 +14,7 @@ protected:
 
     std::vector<std::unique_ptr<Event>> v_event;
     std::vector<std::unique_ptr<RenderPass>> v_render_pass;
+    ParameterManager paramManager;
 
 public:
     Application(int width = 800, int height = 600);
@@ -21,6 +23,7 @@ public:
 
     bool add_event(std::unique_ptr<Event> event);
     bool add_render_pass(std::unique_ptr<RenderPass> pass);
+    ParameterManager& getParamManager();
 
 };
 
