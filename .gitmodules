@@ -7,3 +7,6 @@
 [submodule "dependencies/brdf-loader"]
 	path = dependencies/brdf-loader
 	url = https://github.com/rgl-epfl/brdf-loader.git
+[submodule "dependencies/imgui"]
+	path = dependencies/imgui
+	url = https://github.com/ocornut/imgui.git
