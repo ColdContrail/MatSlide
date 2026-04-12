@@ -1,3 +1,4 @@
+#pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glad/glad.h>
@@ -25,6 +26,15 @@ public:
         return glm::lookAt(position, position + front, up);
     }
 
+    glm::mat4 GetRotationMatrix() const {
+        glm::mat4 rotation(1.0f);
+        rotation[0] = glm::vec4(right.x, up.x, -front.x, 0.0f);
+        rotation[1] = glm::vec4(right.y, up.y, -front.y, 0.0f);
+        rotation[2] = glm::vec4(right.z, up.z, -front.z, 0.0f);
+        rotation[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        return rotation;
+    }
+
     glm::mat4 GetProjectionMatrix(float aspectRatio, float nearPlane = 0.1f, float farPlane = 100.0f) const {
         return glm::perspective(glm::radians(fovy), aspectRatio, nearPlane, farPlane);
     }
@@ -37,8 +47,8 @@ public:
         yaw += deltaYaw * mouseSensitivity;
         pitch += deltaPitch * mouseSensitivity;
         
-        if (pitch > 89.0f) pitch = 89.0f;
-        if (pitch < -89.0f) pitch = -89.0f;
+        if (pitch > 89.0f) pitch = -89.0f;
+        if (pitch < -89.0f) pitch = 89.0f;
         
         updateCameraVectors();
     }

@@ -10,10 +10,13 @@ add_executable(MatSlideApp
     src/main.cpp
     src/core/Application.cpp
     src/core/ParameterManager.cpp
+    src/core/ExrLoader.cpp
     src/rendering/BackgroundPass.cpp
+    src/rendering/EnvMapPass.cpp
     src/rendering/MeshPass.cpp
     src/rendering/MerlPass.cpp
     src/inference/ONNXRuntimeWrapper.cpp
+    src/inference/BrdfProvider.cpp
 )
 
 set(ONNXRUNTIME_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/onnxruntime-win-x64-1.24.4")
@@ -53,6 +56,12 @@ target_include_directories(MatSlideApp PRIVATE
 
 target_sources(MatSlideApp PRIVATE
     dependencies/glad/src/glad.c
+    dependencies/tinyexr/deps/miniz/miniz.c
+)
+
+target_include_directories(MatSlideApp PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/tinyexr
+    ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/tinyexr/deps/miniz
 )
 
 add_custom_command(TARGET MatSlideApp POST_BUILD

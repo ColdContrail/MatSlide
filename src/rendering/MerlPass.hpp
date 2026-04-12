@@ -4,6 +4,7 @@
 #include <core/ObjLoader.hpp>
 #include <core/ShaderParser.hpp>
 #include <core/Camera.hpp>
+#include <inference/BrdfProvider.hpp>
 #include <memory>
 #include <vector>
 #include <string>
@@ -12,7 +13,7 @@ class MerlPass : public RenderPass {
 private:
     std::vector<std::unique_ptr<Mesh>> v_mesh;
     std::unique_ptr<ShaderParser> parser;
-    std::unique_ptr<Camera> camera;
+    std::shared_ptr<Camera> camera;
     GLuint brdfTexture;
 
     glm::vec3 lightPos;
@@ -20,9 +21,11 @@ private:
     float lightRotationRadius;
     float lightRotationSpeed;
 
-    bool loadMerlBRDF(const std::string& filename);
+    BrdfProvider* brdfProvider;
+
+    void uploadBrdfTexture();
 public:
-    MerlPass();
+    MerlPass(BrdfProvider* provider, std::shared_ptr<Camera> cam);
     virtual void init();
     virtual void execute();
     virtual void clean();

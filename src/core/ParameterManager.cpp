@@ -31,25 +31,25 @@ void ParameterManager::notify() {
 void ParameterManager::renderGUI() {
     ImGui::Begin("Material Parameters");
 
-    ImGui::SliderFloat("GGX Roughness", &params.ggxRoughness, 0.0f, 1.0f);
+    if (ImGui::SliderFloat("GGX Roughness", &params.ggxRoughness, 0.0f, 1.0f)) dirty = true;
     ImGui::Separator();
 
     ImGui::Text("Diffuse Albedo");
-    ImGui::SliderFloat("Diffuse R", &params.diffuseR, 0.0f, 1.0f);
-    ImGui::SliderFloat("Diffuse G", &params.diffuseG, 0.0f, 1.0f);
-    ImGui::SliderFloat("Diffuse B", &params.diffuseB, 0.0f, 1.0f);
+    if (ImGui::SliderFloat("Diffuse R", &params.diffuseR, 0.0f, 0.5f)) dirty = true;
+    if (ImGui::SliderFloat("Diffuse G", &params.diffuseG, 0.0f, 0.5f)) dirty = true;
+    if (ImGui::SliderFloat("Diffuse B", &params.diffuseB, 0.0f, 0.5f)) dirty = true;
     ImGui::Separator();
 
     ImGui::Text("Specular Albedo");
-    ImGui::SliderFloat("Specular R", &params.specularR, 0.0f, 1.0f);
-    ImGui::SliderFloat("Specular G", &params.specularG, 0.0f, 1.0f);
-    ImGui::SliderFloat("Specular B", &params.specularB, 0.0f, 1.0f);
+    if (ImGui::SliderFloat("Specular R", &params.specularR, 0.0f, 0.5f)) dirty = true;
+    if (ImGui::SliderFloat("Specular G", &params.specularG, 0.0f, 0.5f)) dirty = true;
+    if (ImGui::SliderFloat("Specular B", &params.specularB, 0.0f, 0.5f)) dirty = true;
     ImGui::Separator();
 
     ImGui::Text("Optimal Threshold");
-    ImGui::SliderFloat("Threshold R", &params.optimalThresholdR, 0.0f, 1.0f);
-    ImGui::SliderFloat("Threshold G", &params.optimalThresholdG, 0.0f, 1.0f);
-    ImGui::SliderFloat("Threshold B", &params.optimalThresholdB, 0.0f, 1.0f);
+    if (ImGui::SliderFloat("Threshold R", &params.optimalThresholdR, 0.0f, 1.0f)) dirty = true;
+    if (ImGui::SliderFloat("Threshold G", &params.optimalThresholdG, 0.0f, 1.0f)) dirty = true;
+    if (ImGui::SliderFloat("Threshold B", &params.optimalThresholdB, 0.0f, 1.0f)) dirty = true;
 
     ImGui::End();
 }

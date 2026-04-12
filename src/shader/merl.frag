@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 in vec3 WorldPos;
 in vec3 Normal;
@@ -56,6 +56,7 @@ void main()
 
     vec3 color = Lo;
     color = color / (color + vec3(1.0));
+    //color = color / (color + 0.187) * 1.035;
     color = pow(color, vec3(1.0 / 2.2));
 
     FragColor = vec4(color, 1.0);
