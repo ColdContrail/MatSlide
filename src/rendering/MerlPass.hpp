@@ -7,7 +7,6 @@
 #include <inference/BrdfProvider.hpp>
 #include <memory>
 #include <vector>
-#include <string>
 
 class MerlPass : public RenderPass {
 private:

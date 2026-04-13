@@ -1,5 +1,6 @@
 build/
 .cache/
-assets/
+assets/brdf/
+assets/onnx/
 o.binary
 dependencies/onnxruntime-win-x64-1.24.4/

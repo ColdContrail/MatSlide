@@ -15,6 +15,7 @@ add_executable(MatSlideApp
     src/rendering/EnvMapPass.cpp
     src/rendering/MeshPass.cpp
     src/rendering/MerlPass.cpp
+    src/rendering/IblMerlPass.cpp
     src/inference/ONNXRuntimeWrapper.cpp
     src/inference/BrdfProvider.cpp
 )
