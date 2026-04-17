@@ -96,8 +96,7 @@ MatSlide/
 │   ├── shader/         # GLSL 着色器文件
 │   └── utils/          # 工具程序（转换、推断）
 ├── dependencies/       # 第三方库
-├── assets/             # 资源文件（模型、贴图）
-└── build_vs/           # Visual Studio 构建目录
+└── assets/             # 资源文件（模型、环境光）
 ```
 
 ## 文件说明

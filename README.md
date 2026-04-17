@@ -96,8 +96,7 @@ MatSlide/
 │   ├── shader/         # GLSL shader files
 │   └── utils/          # Utility programs (conversion, inference)
 ├── dependencies/       # Third-party libraries
-├── assets/             # Asset files (models, textures)
-└── build_vs/           # Visual Studio build directory
+└── assets/             # Asset files (models, envlights)
 ```
 
 ## File Descriptions
