@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 project(MatSlide)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(dependencies/glfw)
-
-set(CMAKE_GENERATOR "Ninja" CACHE INTERNAL "")
 
 add_executable(MatSlideApp 
     src/main.cpp
@@ -36,6 +36,12 @@ target_include_directories(MatSlideApp PRIVATE
     src/rendering
     src/inference
 )
+
+if(MSVC)
+    target_compile_options(MatSlideApp PRIVATE /W3 /MP /utf-8)
+    target_compile_definitions(MatSlideApp PRIVATE _CRT_SECURE_NO_WARNINGS NOMINMAX)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MatSlideApp)
+endif()
 
 set(IMGUI_SOURCES
     dependencies/imgui/imgui.cpp
@@ -89,6 +95,13 @@ target_include_directories(InferToBinary PRIVATE
     src/core
     src/inference
 )
+
+if(MSVC)
+    target_compile_options(Convertor PRIVATE /W3 /MP /utf-8)
+    target_compile_definitions(Convertor PRIVATE _CRT_SECURE_NO_WARNINGS NOMINMAX)
+    target_compile_options(InferToBinary PRIVATE /W3 /MP /utf-8)
+    target_compile_definitions(InferToBinary PRIVATE _CRT_SECURE_NO_WARNINGS NOMINMAX)
+endif()
 
 add_custom_command(TARGET InferToBinary POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
