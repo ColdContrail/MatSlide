@@ -17,7 +17,7 @@ protected:
     ParameterManager paramManager;
 
 public:
-    Application(int width = 800, int height = 600);
+    Application(int width = 1920, int height = 1080);
     virtual ~Application();
     virtual int run();
 

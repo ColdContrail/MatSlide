@@ -1,5 +1,6 @@
 #include "IblMerlPass.hpp"
 #include "geometry.hpp"
+#include <GLFW/glfw3.h>
 #include <memory>
 #include <cstdio>
 #include <vector>
@@ -96,13 +97,16 @@ void IblMerlPass::init() {
     pass_name = "IBL Merl pass";
 
     v_mesh.emplace_back(std::make_unique<Mesh>());
-    auto loader = std::make_unique<objLoader>();
+
+    const int model_scale = 1;
+    auto loader = std::make_unique<objLoader>(model_scale);
     loader->parse("assets\\bunny_10k.obj", *(v_mesh.back()));
     if (!v_mesh.back()->set_buffer()) {
         exit(-1);
     }
 
     brdfShader = std::make_unique<ShaderParser>("src\\shader\\ibl_merl.vert", "src\\shader\\ibl_merl_exp.frag");
+    depthShader = std::make_unique<ShaderParser>("src\\shader\\ibl_merl.vert", "src\\shader\\ibl_merl_depth.frag");
     displayShader = std::make_unique<ShaderParser>("src\\shader\\ibl_display.vert", "src\\shader\\ibl_display.frag");
 
     brdfTexture = 0;
@@ -123,7 +127,7 @@ void IblMerlPass::init() {
         exrLoader->uploadCubemap(1024);
     }
 
-    setupAccumulationBuffer(1000, 800);
+    setupAccumulationBuffer(1920, 1080);
     setupDisplayQuad();
 }
 
@@ -134,7 +138,7 @@ void IblMerlPass::execute() {
         brdfProvider->setDirtyForConsumer(false);
         resetAccumulation();
     }
-
+    
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
     int vpWidth = viewport[2];
@@ -154,18 +158,35 @@ void IblMerlPass::execute() {
     }
 
     glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
     glCullFace(GL_BACK);
 
-    brdfShader->use();
     glm::mat4 view       = camera->GetViewMatrix();
-    glm::mat4 projection = camera->GetProjectionMatrix(1.25f);
+    float aspectRatio    = vpWidth / static_cast<float>(vpHeight);
+    glm::mat4 projection = camera->GetProjectionMatrix(aspectRatio);
+    glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(1.4f));
+    model = glm::rotate(model, modelRotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 
+    glBindVertexArray(v_mesh.back()->get_VAO());
+    GLsizei index_count = v_mesh.back()->get_index_count();
+
+    // Depth pre-pass
+    depthShader->use();
+    depthShader->setProjectionMatrix(projection);
+    depthShader->setViewMatrix(view);
+    depthShader->setModelMatrix(model);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glDisable(GL_BLEND);
+    glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, 0);
+
+    // Main shading pass
+    brdfShader->use();
     brdfShader->setProjectionMatrix(projection);
     brdfShader->setViewMatrix(view);
-    brdfShader->setModelMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(1.4f)));
+    brdfShader->setModelMatrix(model);
 
     brdfShader->setVec3("viewPos", camera->GetPosition());
     brdfShader->setInt("frameCount", frameCount);
@@ -186,12 +207,16 @@ void IblMerlPass::execute() {
     glBindTexture(GL_TEXTURE_CUBE_MAP, exrLoader->getCubemapID());
     brdfShader->setInt("envMap", 1);
 
-    glBindVertexArray(v_mesh.back()->get_VAO());
-
-    GLsizei index_count = v_mesh.back()->get_index_count();
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDepthMask(GL_FALSE);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
     glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS); 
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, vpWidth, vpHeight);
@@ -223,6 +248,7 @@ void IblMerlPass::resetAccumulation() {
 
 void IblMerlPass::clean() {
     brdfShader = nullptr;
+    depthShader = nullptr;
     displayShader = nullptr;
     v_mesh.clear();
     exrLoader = nullptr;
@@ -256,6 +282,7 @@ IblMerlPass::IblMerlPass(BrdfProvider* provider, const std::string& path, std::s
     : brdfProvider(provider), paramManager(pm), exrPath(path), camera(cam),
       brdfTexture(0), accumFBO(0), accumTexture(0), accumDepthRBO(0),
       displayVAO(0), displayVBO(0),
-      frameCount(0), screenWidth(0), screenHeight(0), prevRoughness(pm ? pm->getParams().ggxRoughness : 0.1f) {
+      frameCount(0), screenWidth(0), screenHeight(0), prevRoughness(pm ? pm->getParams().ggxRoughness : 0.1f),
+      modelRotationAngle(0.0f), lastRotationTime(0.0) {
     init();
 }

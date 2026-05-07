@@ -17,6 +17,7 @@ class IblMerlPass : public RenderPass {
 private:
     std::vector<std::unique_ptr<Mesh>> v_mesh;
     std::unique_ptr<ShaderParser> brdfShader;
+    std::unique_ptr<ShaderParser> depthShader;
     std::unique_ptr<ShaderParser> displayShader;
     std::shared_ptr<Camera> camera;
 
@@ -36,6 +37,11 @@ private:
     int frameCount;
     int screenWidth;
     int screenHeight;
+
+    float modelRotationAngle;
+    double lastRotationTime;
+    static constexpr float ROTATION_INTERVAL = 0.1f;
+    static constexpr float ROTATION_DEGREES = 1.0f;
 
     void uploadBrdfTexture();
     void setupAccumulationBuffer(int width, int height);

@@ -81,8 +81,12 @@ void EnvMapPass::execute() {
 
     parser->use();
 
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    float aspectRatio = viewport[2] / static_cast<float>(viewport[3]);
+
     glm::mat4 view = camera->GetRotationMatrix();
-    glm::mat4 projection = camera->GetProjectionMatrix(1.25f);
+    glm::mat4 projection = camera->GetProjectionMatrix(aspectRatio);
     parser->setViewMatrix(view);
     parser->setProjectionMatrix(projection);
 

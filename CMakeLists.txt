@@ -61,6 +61,17 @@ target_include_directories(MatSlideApp PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/imgui/backends
 )
 
+option(ENABLE_ASAN "Enable AddressSanitizer" ON)
+
+if(ENABLE_ASAN)
+    if(MSVC)
+        add_compile_options(/fsanitize=address)
+    else()
+        add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
+        add_link_options(-fsanitize=address)
+    endif()
+endif()
+
 target_sources(MatSlideApp PRIVATE
     dependencies/glad/src/glad.c
     dependencies/tinyexr/deps/miniz/miniz.c
