@@ -66,8 +66,7 @@ MatSlide is an interactive tool for real-time preview of neural network–genera
 
 6. **Run the application**
    ```bash
-   cd ../bin
-   MatSlideApp.exe
+   ./MatSlideApp.exe
    ```
 
 ## Usage
@@ -85,6 +84,18 @@ MatSlide is an interactive tool for real-time preview of neural network–genera
    - Adjust **Diffuse RGB** values to set the base color
    - Adjust **Specular RGB** values to control highlight color
 
+## Unity Package
+
+A Unity package is available at [`Unity/com.contrail.matslide`](Unity/com.contrail.matslide), providing the same BRDF rendering capabilities inside the Unity Editor (URP, Unity 6).
+
+- **MerlBrdf** shader — point-light BRDF with MERL 3D LUT sampling
+- **IblMerlBrdf** shader — IBL with multiple importance sampling + direct light
+- **BrdfDecoderGUI** — in-editor ONNX Runtime inference panel
+- **MerlBrdfLoader** — load raw MERL `.binary` files into `Texture3D`
+- **IblMerlController / MerlBrdfController** — MonoBehaviour controllers for material binding and light animation
+
+See the package's `package.json` for dependency and import details.
+
 ## Project Structure
 
 ```
@@ -95,6 +106,7 @@ MatSlide/
 │   ├── inference/      # ONNX Runtime wrapper and BRDF provider
 │   ├── shader/         # GLSL shader files
 │   └── utils/          # Utility programs (conversion, inference)
+├── Unity/              # Unity package (URP, Unity 6)
 ├── dependencies/       # Third-party libraries
 └── assets/             # Asset files (models, envlights)
 ```

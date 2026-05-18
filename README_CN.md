@@ -66,8 +66,7 @@ MatSlide 是一个用于实时预览神经网络输出材质的交互式工具�
 
 6. **运行应用程序**
    ```bash
-   cd ../bin
-   MatSlideApp.exe
+   ./MatSlideApp.exe
    ```
 
 ## 使用方法
@@ -85,6 +84,18 @@ MatSlide 是一个用于实时预览神经网络输出材质的交互式工具�
    - 调整 **漫反射 RGB** 值控制基础颜色
    - 调整 **镜面反射 RGB** 值控制高光颜色
 
+## Unity 包
+
+[`Unity/com.contrail.matslide`](Unity/com.contrail.matslide) 提供了一个 Unity 包，在 Unity Editor 中实现相同的 BRDF 渲染能力（URP，Unity 6）。
+
+- **MerlBrdf** 着色器 — 基于 MERL 3D LUT 采样的点光源 BRDF
+- **IblMerlBrdf** 着色器 — 多重重要性采样 IBL + 直接光照
+- **BrdfDecoderGUI** — 编辑器内 ONNX Runtime 推理面板
+- **MerlBrdfLoader** — 将 MERL `.binary` 原始文件加载为 `Texture3D`
+- **IblMerlController / MerlBrdfController** — 材质绑定与光源动画的 MonoBehaviour 控制器
+
+依赖和导入详情见包内 `package.json`。
+
 ## 项目结构
 
 ```
@@ -95,6 +106,7 @@ MatSlide/
 │   ├── inference/      # ONNX Runtime 封装和 BRDF 提供器
 │   ├── shader/         # GLSL 着色器文件
 │   └── utils/          # 工具程序（转换、推断）
+├── Unity/              # Unity 包（URP，Unity 6）
 ├── dependencies/       # 第三方库
 └── assets/             # 资源文件（模型、环境光）
 ```
