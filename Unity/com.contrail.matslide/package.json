@@ -1,0 +1,12 @@
+{
+  "name": "com.contrail.matslide",
+  "version": "1.0.0",
+  "displayName": "MatSlide — MERL BRDF Viewer",
+  "description": "Real-time MERL measured BRDF visualization in Unity. \nSupports IBL environment lighting with multiple importance sampling, point-light direct illumination, and ONNX Runtime neural BRDF decoding.\nLoad raw MERL binary (.binary) or decode from neural network (.onnx) at runtime.",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "17.0.0"
+  },
+  "keywords": ["BRDF", "MERL", "IBL", "rendering", "shader", "ONNX", "neural"],
+  "author": { "name": "contrail" }
+}
