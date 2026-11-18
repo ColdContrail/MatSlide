@@ -123,13 +123,18 @@ int main(int argc, char** argv) {
                                 std::cos(theta_out)
                             );
                             
+                            if (wi.z() <= 0.0f || wo.z() <= 0.0f) {
+                                continue;
+                            }
+
                             Vector3f fr_forward = brdf.eval(wi, wo);
                             Vector3f fr_reverse = brdf.eval(wo, wi);
-                            Vector3f fr = (fr_forward + fr_reverse) * 0.5f;
-                            
-                            red_sum += fr[0];
-                            green_sum += fr[1];
-                            blue_sum += fr[2];
+                            const double cos_i = static_cast<double>(wi.z());
+                            const double cos_o = static_cast<double>(wo.z());
+
+                            red_sum += 0.5 * (fr_forward[0] / cos_o + fr_reverse[0] / cos_i);
+                            green_sum += 0.5 * (fr_forward[1] / cos_o + fr_reverse[1] / cos_i);
+                            blue_sum += 0.5 * (fr_forward[2] / cos_o + fr_reverse[2] / cos_i);
                             valid_samples++;
                         }
                     }
@@ -153,13 +158,13 @@ int main(int argc, char** argv) {
                         merl_data[idx + n] = green;
                         merl_data[idx + 2 * n] = blue;
                     } else {
-                        // 如果没有有效样本，保留默认值（0.0）
+                        // 如果没有有效样本，写入 MERL 无效值
                         int idx = k + 
                                 j * (BRDF_SAMPLING_RES_PHI_D / 2) + 
                                 i * (BRDF_SAMPLING_RES_PHI_D / 2) * BRDF_SAMPLING_RES_THETA_D;
-                        merl_data[idx] = 0.0;
-                        merl_data[idx + n] = 0.0;
-                        merl_data[idx + 2 * n] = 0.0;
+                        merl_data[idx] = -1.0;
+                        merl_data[idx + n] = -1.0;
+                        merl_data[idx + 2 * n] = -1.0;
                     }
                 }
             }
